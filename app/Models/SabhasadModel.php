@@ -31,4 +31,32 @@ class SabhasadModel extends Model
  * @var array
  */
 protected $guarded = [];
+
+ protected $casts = [
+        'married' => 'boolean',
+        'isSameAddress' => 'boolean',
+        'competitiveCandidate' => 'boolean',
+        'isPoliticalBackground' => 'boolean',
+        'isSocialBackground' => 'boolean',
+        
+    ];
+
+public function educationData(){
+    return $this->belongsTo(SabhasadEducationModel::class, 'educationID');
+}
+public function employeeData(){
+    return $this->belongsTo(SabhasadEmploymentModel::class, 'businessID');
+}
+public function currentAddress(){
+    return $this->belongsTo(AddressDirectory::class, 'currentVillage','AddressDirectoryID');
+}
+public function permanentAddress(){
+    return $this->belongsTo(AddressDirectory::class, 'permanentVillage','AddressDirectoryID');
+}
+public function documentData(){
+    return $this->hasOne(SabhasadDocumentModel::class, 'sabhasadID', 'sabhasadID');
+}
+public function verificationData(){
+    return $this->hasOne(SabhasadVerificationModel::class, 'sabhasadID', 'sabhasadID');
+}
 }

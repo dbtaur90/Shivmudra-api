@@ -8,6 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class AddressDirectory extends Model
 {
     use HasFactory;
+      /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'AddressDirectory';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'AddressDirectoryID';
+
+    /**
+ * The attributes that aren't mass assignable.
+ *
+ * @var array
+ */
+protected $guarded = [];
 }
 //Mauli@Pass4DB
 

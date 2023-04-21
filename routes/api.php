@@ -25,3 +25,8 @@ Route::get('/addressDirectory/villages', [AddressDirectoryController::class, 'vi
 Route::get('/addressDirectory/address/{id}', [AddressDirectoryController::class, 'getAddressDirectory']);
 Route::post('/sabhasad/register', [SabhasadRegistrationController::class, 'registerSabhasad']);
 Route::post('/sabhasad/submitDocument', [SabhasadRegistrationController::class, 'submitDocument']);
+Route::get('/sabhasad/sabhasad-list', [SabhasadRegistrationController::class, 'getSabhasadList']);
+Route::get('/sabhasad/sabhasad-name-address/{sabhasadNumber}', [SabhasadRegistrationController::class, 'getSabhasadNameAddress']);
+Route::get('/sabhasad/sabhasadDetails/{id}', [SabhasadRegistrationController::class, 'getSabhasadDetails']);
+Route::get('/sabhasad/checkDuplicatePhNumber/{value}', [SabhasadRegistrationController::class, 'isPhoneNumberNew']);
+Route::get('/sabhasad/checkDuplicateAadharNumber/{value}', [SabhasadRegistrationController::class, 'isAadharNumberNew']);

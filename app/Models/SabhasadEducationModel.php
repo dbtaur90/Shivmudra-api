@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SabhasadModel;
 
 class SabhasadEducationModel extends Model
 {
@@ -14,6 +15,11 @@ class SabhasadEducationModel extends Model
      * @var string
      */
     protected $table = 'tbSabhasadEducation';
+    
+     protected $casts = [
+        'isEducationCompleted' => 'boolean',
+    ];
+
 
 
     /**
