@@ -10,7 +10,8 @@ use App\Models\SabhasadEmploymentModel;
 use App\Models\SabhasadModel;
 use App\Models\SabhasadVerificationModel;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 class SabhasadRegistrationController extends Controller
 {
     public function registerSabhasad(Request $request ){
@@ -58,28 +59,49 @@ class SabhasadRegistrationController extends Controller
        return response($sabhasad->sabhasadID);
     }
     public function submitDocument(Request $request){
+        if( !$request->file('aadharImage')){
+            return response(['message'=>'Bad Request'], 400);
+        }
+        if($request->id && $request->id > 0){
+           $sabhasad = SabhasadDocumentModel::find($request->id);
+           Storage::delete([$sabhasad->aadharImage, $sabhasad->photoImage, $sabhasad->signImage,]);
+           if($request->tcImage != null)
+                Storage::delete($sabhasad->tcImage);
+        }
         $sabhasadID = $request->sabhasadID;
+        if($request->firstName && $request->lastName && $request->firstName != ''){
+            $sbdata = [
+                'aadhar'=> $request->aadhar,
+                'firstName'=> $request->firstName,
+                'middleName'=> $request->middleName,
+                'lastName'=> $request->lastName,
+                'dob'=> $request->dob
+            ];
+            
+            SabhasadModel::where('sabhasadID', $sabhasadID)->update($sbdata);
+        }
         $aadharImage = $request->file('aadharImage')->store('aadhar', 'public');
         $tcImage = $request->file('tcImage')->store('tc', 'public');
         $photoImage = $request->file('photoImage')->store('photo', 'public');
         $signImage = $request->file('signImage')->store('sign', 'public');
-
-        $data = SabhasadDocumentModel::create([
+        $data = [
             'sabhasadID' => $sabhasadID,
             'aadharImage' => $aadharImage,
             'tcImage' => $tcImage,
             'photoImage' => $photoImage,
             'signImage' => $signImage,
-        ]);
+        ];
+        $data1 = SabhasadDocumentModel::updateOrCreate(['sabhasadID' => $sabhasadID], $data);
 
-        return response($data);
+        return response($data1);
     }
     public function getSabhasadList(){
-      $dbSabhasadList =  SabhasadModel::with(['verificationData'])->orderByDesc('sabhasadID',)->get();
+      $dbSabhasadList =  SabhasadModel::with(['verificationData', 'documentData'])->orderByDesc('sabhasadID',)->get();
       $sabhasadList = [];
       foreach ($dbSabhasadList as $dbSabhasad) {
         $sabhasad = new \stdClass();
         $sabhasad->sabhasadID = $dbSabhasad->sabhasadID;
+        $sabhasad->isDocumentUploaded = $dbSabhasad->documentData != null;
         $sabhasad->name = $dbSabhasad->firstName.' '.$dbSabhasad->middleName.' '.$dbSabhasad->lastName;
         $sabhasad->verification = $dbSabhasad->verificationData;
         array_push($sabhasadList,$sabhasad);
@@ -93,7 +115,13 @@ class SabhasadRegistrationController extends Controller
         $result = DB::select('CALL get_sabhasad_name_address(?)',array($sabhsadNumber));
         return $result;
     }
-    
+    public function generateSabhasadNumber(Request $request){
+        $user = [];
+        Mail::send('send_registration_success_mail',[],function($messages) use ($user){
+            $messages->to('dbtaur90@gmail.com');
+            $messages->subject('Testing Email');
+        });
+    }
     public function updateVerificationStatus(Request $request){
         $requestData = $request->all();
         if(array_key_exists("id",$requestData) && $requestData['id'] && $requestData['id']>0){

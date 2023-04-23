@@ -27,6 +27,8 @@ Route::post('/sabhasad/register', [SabhasadRegistrationController::class, 'regis
 Route::post('/sabhasad/submitDocument', [SabhasadRegistrationController::class, 'submitDocument']);
 Route::get('/sabhasad/sabhasad-list', [SabhasadRegistrationController::class, 'getSabhasadList']);
 Route::get('/sabhasad/sabhasad-name-address/{sabhasadNumber}', [SabhasadRegistrationController::class, 'getSabhasadNameAddress']);
+Route::post('/sabhasad/update-verification-status', [SabhasadRegistrationController::class, 'updateVerificationStatus']);
+Route::post('sabhasad/generate-sabhasad-number', [SabhasadRegistrationController::class, 'generateSabhasadNumber']);
 Route::get('/sabhasad/sabhasadDetails/{id}', [SabhasadRegistrationController::class, 'getSabhasadDetails']);
 Route::get('/sabhasad/checkDuplicatePhNumber/{value}', [SabhasadRegistrationController::class, 'isPhoneNumberNew']);
 Route::get('/sabhasad/checkDuplicateAadharNumber/{value}', [SabhasadRegistrationController::class, 'isAadharNumberNew']);

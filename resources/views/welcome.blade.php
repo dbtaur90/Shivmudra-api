@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
     <title>shivmudra</title>
     <script defer="defer" src="/js/chunk-vendors.3c27d8cf.js"></script>
-    <script defer="defer" src="/js/app.7e7ebd35.js"></script>
+    <script defer="defer" src="/js/app.e618c176.js"></script>
     <link href="/css/chunk-vendors.b9a590d0.css" rel="stylesheet">
     <link href="/css/app.16ae1cd8.css" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/img/icons/favicon.svg">
