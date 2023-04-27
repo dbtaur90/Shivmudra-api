@@ -38,6 +38,7 @@ protected $guarded = [];
         'competitiveCandidate' => 'boolean',
         'isPoliticalBackground' => 'boolean',
         'isSocialBackground' => 'boolean',
+        'workingAria' => 'boolean'
         
     ];
 
