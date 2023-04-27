@@ -25,8 +25,7 @@ Route::get('/thanks', function () {
     return view('thanks_page');
 });
 
-Route::get('storage/{filPath}/{fileName}', function ($filePath, $fileName)
-{
+Route::get('storage/{filPath}/{fileName}', function ($filePath, $fileName){
    // return $filename;
     $path = storage_path('app/public/'.$filePath.'/'. $fileName);
     //return $path;
@@ -42,3 +41,7 @@ Route::get('storage/{filPath}/{fileName}', function ($filePath, $fileName)
 
     return $response;
 });
+
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '^(?!api).*$');
