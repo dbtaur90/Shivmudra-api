@@ -128,6 +128,7 @@ class SabhasadRegistrationController extends Controller
     public function generateSabhasadNumber(Request $request){
         $sbresult = DB::select('CALL generate_sabhasad_number(?)',array($request->verificationID));
         $sabhasadNumber = $sbresult[0]->result;
+        
         if($sabhasadNumber && str_starts_with($sabhasadNumber, 'MS01')){
             $nmresult = DB::select('CALL get_sabhasad_name_address(?)',array($sabhasadNumber));
             $name = $nmresult[0]->nameText;
@@ -136,7 +137,7 @@ class SabhasadRegistrationController extends Controller
             $user = [];
             Mail::send('send_registration_success_mail',$data,function($messages) use ($user){
                 $messages->to('dbtaur90@gmail.com');
-                $messages->subject('Testing Email');
+                $messages->subject('Shivmudra | Registration Success');
             });
             return response(['mailSent'=> true, 'name'=>$name, 'sabhasadNumber'=> $sabhasadNumber],200);
         }
@@ -145,7 +146,7 @@ class SabhasadRegistrationController extends Controller
     public function updateVerificationStatus(Request $request){
         $requestData = $request->all();
         if(array_key_exists("id",$requestData) && $requestData['id'] && $requestData['id']>0){
-            $sabhasad = SabhasadVerificationModel::find($requestData['sabhasadID']);
+            $sabhasad = SabhasadVerificationModel::find($requestData['id']);
             foreach ($requestData as $key => $value) {
                $sabhasad[$key] = $value;
             }
