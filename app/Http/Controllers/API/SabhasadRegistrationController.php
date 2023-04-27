@@ -95,8 +95,17 @@ class SabhasadRegistrationController extends Controller
 
         return response($data1);
     }
-    public function getSabhasadList(){
-      $dbSabhasadList =  SabhasadModel::with(['verificationData', 'documentData'])->orderByDesc('sabhasadID',)->get();
+    public function getSabhasadList(Request $request){
+        $wn = $request->tokenwn;
+        // Call the stored procedure to get the list of member IDs.
+        $memberIDs = DB::select('CALL get_sabhasad_list('.$wn.')');
+        // Extract the member IDs from the result set.
+        $memberIDs = array_column($memberIDs, 'sabhasadID');
+
+      $dbSabhasadList =  SabhasadModel::with(['verificationData', 'documentData'])
+      ->whereIn('sabhasadID',$memberIDs)
+      //->orderByDesc('sabhasadID',)
+      ->get();
       $sabhasadList = [];
       foreach ($dbSabhasadList as $dbSabhasad) {
         $sabhasad = new \stdClass();
@@ -116,11 +125,21 @@ class SabhasadRegistrationController extends Controller
         return $result;
     }
     public function generateSabhasadNumber(Request $request){
-        $user = [];
-        Mail::send('send_registration_success_mail',[],function($messages) use ($user){
-            $messages->to('dbtaur90@gmail.com');
-            $messages->subject('Testing Email');
-        });
+        $sbresult = DB::select('CALL generate_sabhasad_number(?)',array($request->verificationID));
+        $sabhasadNumber = $sbresult[0]->result;
+        if($sabhasadNumber && str_starts_with($sabhasadNumber, 'MS01')){
+            $nmresult = DB::select('CALL get_sabhasad_name_address(?)',array($sabhasadNumber));
+            $name = $nmresult[0]->nameText;
+
+            $data = ['name'=>$name, 'sabhasadNumber'=> $sabhasadNumber];
+            $user = [];
+            Mail::send('send_registration_success_mail',$data,function($messages) use ($user){
+                $messages->to('dbtaur90@gmail.com');
+                $messages->subject('Testing Email');
+            });
+            return response(['mailSent'=> true, 'name'=>$name, 'sabhasadNumber'=> $sabhasadNumber],200);
+        }
+        
     }
     public function updateVerificationStatus(Request $request){
         $requestData = $request->all();
