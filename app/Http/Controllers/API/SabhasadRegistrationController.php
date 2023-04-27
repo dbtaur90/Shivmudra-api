@@ -152,7 +152,7 @@ class SabhasadRegistrationController extends Controller
         }
         else{
             if(array_key_exists("id",$requestData))
-                unset($request['id']);
+                unset($requestData['id']);
             $sabhasad = new SabhasadVerificationModel($requestData);
         }
         $sabhasad->save();
