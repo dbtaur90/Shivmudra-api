@@ -26,10 +26,10 @@ Route::middleware([CheckToken::class])->group(function () {
     Route::get('/sabhasad/sabhasad-name-address/{sabhasadNumber}', [SabhasadRegistrationController::class, 'getSabhasadNameAddress']);
     Route::post('/sabhasad/update-verification-status', [SabhasadRegistrationController::class, 'updateVerificationStatus']);
     Route::post('sabhasad/generate-sabhasad-number', [SabhasadRegistrationController::class, 'generateSabhasadNumber']);
-    Route::get('/sabhasad/sabhasadDetails/{id}', [SabhasadRegistrationController::class, 'getSabhasadDetails']);
-
+    
 });
 
+Route::get('/sabhasad/sabhasadDetails/{id}', [SabhasadRegistrationController::class, 'getSabhasadDetails']);
 Route::get('/addressDirectory/districts', [AddressDirectoryController::class, 'districtList']);
 Route::get('/addressDirectory/talukas/{district}', [AddressDirectoryController::class, 'talukaList']);
 Route::get('/addressDirectory/villages', [AddressDirectoryController::class, 'villageList']);

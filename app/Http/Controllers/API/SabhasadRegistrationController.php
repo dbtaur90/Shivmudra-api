@@ -110,6 +110,7 @@ class SabhasadRegistrationController extends Controller
       foreach ($dbSabhasadList as $dbSabhasad) {
         $sabhasad = new \stdClass();
         $sabhasad->sabhasadID = $dbSabhasad->sabhasadID;
+        $sabhasad->whatsappNumber = $dbSabhasad->whatsappNumber;
         $sabhasad->isDocumentUploaded = $dbSabhasad->documentData != null;
         $sabhasad->name = $dbSabhasad->firstName.' '.$dbSabhasad->middleName.' '.$dbSabhasad->lastName;
         $sabhasad->verification = $dbSabhasad->verificationData;
