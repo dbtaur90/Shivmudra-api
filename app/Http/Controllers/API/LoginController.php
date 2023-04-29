@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Models\Executive;
 class LoginController extends Controller
 {
     public function login(Request $request){
@@ -23,15 +23,17 @@ class LoginController extends Controller
                 if($data['statusCode'] == '200'){
                     $whatsappNumber = $data['user']['waNumber'];
                     $whatsappNumber = $str2 = substr($whatsappNumber, 2); 
-                    $executives = Executive::whereIn('sabhasadID', function ($query) use ($whatsappNumber) {
-                        $query->select('sabhasadID')
-                              ->from('tbSabhasad')
-                              ->where('whatsappNumber', $whatsappNumber);
-                    })->get();
-                    return response($executives);
+                    $sbresult = DB::select('CALL get_user_details(?)', array($whatsappNumber));
+                    if($sbresult && count($sbresult)>0){
+                        $executives = (array)$sbresult[0];
+                        return response($executives, 200);
+                    }
+                    else{
+                        return response()->json(['error' => 'Unauthorized'], 401);
+                    }
                 }
                 else
-                    return response($response);
+                    return response($response, $data['statusCode']);
                 // do something with the response data
             }
             else {

@@ -12,9 +12,11 @@ use App\Models\SabhasadVerificationModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
+
 class SabhasadRegistrationController extends Controller
 {
-    public function registerSabhasad(Request $request ){
+    public function registerSabhasad(Request $request)
+    {
         $requestData = $request->all();
         $employementData = $requestData['employee_data'];
         $educationData = $requestData['education_data'];
@@ -23,30 +25,29 @@ class SabhasadRegistrationController extends Controller
         unset($requestData['current_address']);
         unset($requestData['permanent_address']);
         unset($requestData['document_data']);
-        
-         if($employementData){
-               $employementData['employmentType'] = implode(", ", $employementData['employmentType']);
-           }
-          $requestData['helpForOrg'] = implode(", ", $requestData['helpForOrg']);
-        if(array_key_exists("sabhasadID",$requestData) && $requestData['sabhasadID'] && $requestData['sabhasadID']>0){
+
+        if ($employementData) {
+            $employementData['employmentType'] = implode(", ", $employementData['employmentType']);
+        }
+        $requestData['helpForOrg'] = implode(", ", $requestData['helpForOrg']);
+        if (array_key_exists("sabhasadID", $requestData) && $requestData['sabhasadID'] && $requestData['sabhasadID'] > 0) {
             unset($requestData['educationID']);
             unset($requestData['businessID']);
             $sabhasad = SabhasadModel::find($requestData['sabhasadID']);
             foreach ($requestData as $key => $value) {
-               $sabhasad[$key] = $value;
+                $sabhasad[$key] = $value;
             }
             $sabhasadEdu = SabhasadEducationModel::find($educationData['id']);
             foreach ($educationData as $key => $value) {
-               $sabhasadEdu[$key] = $value;
+                $sabhasadEdu[$key] = $value;
             }
             $sabhasadEmp = SabhasadEmploymentModel::find($employementData['id']);
             foreach ($employementData as $key => $value) {
-               $sabhasadEmp[$key] = $value;
+                $sabhasadEmp[$key] = $value;
             }
-            
-        }
-        else{
-            
+
+        } else {
+
             $sabhasad = new SabhasadModel($requestData);
             $sabhasadEdu = new SabhasadEducationModel($educationData);
             $sabhasadEmp = new SabhasadEmploymentModel($employementData);
@@ -55,29 +56,30 @@ class SabhasadRegistrationController extends Controller
         }
         $sabhasad->educationData()->associate($sabhasadEdu);
         $sabhasad->employeeData()->associate($sabhasadEmp);
-       $sabhasad->save();
-       return response($sabhasad->sabhasadID);
+        $sabhasad->save();
+        return response($sabhasad->sabhasadID);
     }
-    public function submitDocument(Request $request){
-        if( !$request->file('aadharImage')){
-            return response(['message'=>'Bad Request'], 400);
+    public function submitDocument(Request $request)
+    {
+        if (!$request->file('aadharImage')) {
+            return response(['message' => 'Bad Request'], 400);
         }
-        if($request->id && $request->id > 0){
-           $sabhasad = SabhasadDocumentModel::find($request->id);
-           Storage::delete([$sabhasad->aadharImage, $sabhasad->photoImage, $sabhasad->signImage,]);
-           if($request->tcImage != null)
+        if ($request->id && $request->id > 0) {
+            $sabhasad = SabhasadDocumentModel::find($request->id);
+            Storage::delete([$sabhasad->aadharImage, $sabhasad->photoImage, $sabhasad->signImage,]);
+            if ($request->tcImage != null)
                 Storage::delete($sabhasad->tcImage);
         }
         $sabhasadID = $request->sabhasadID;
-        if($request->firstName && $request->lastName && $request->firstName != ''){
+        if ($request->firstName && $request->lastName && $request->firstName != '') {
             $sbdata = [
-                'aadhar'=> $request->aadhar,
-                'firstName'=> $request->firstName,
-                'middleName'=> $request->middleName,
-                'lastName'=> $request->lastName,
-                'dob'=> $request->dob
+                'aadhar' => $request->aadhar,
+                'firstName' => $request->firstName,
+                'middleName' => $request->middleName,
+                'lastName' => $request->lastName,
+                'dob' => $request->dob
             ];
-            
+
             SabhasadModel::where('sabhasadID', $sabhasadID)->update($sbdata);
         }
         $aadharImage = $request->file('aadharImage')->store('aadhar', 'public');
@@ -95,95 +97,107 @@ class SabhasadRegistrationController extends Controller
 
         return response($data1);
     }
-    public function getSabhasadList(Request $request){
+    public function getSabhasadList(Request $request)
+    {
         $wn = $request->tokenwn;
         // Call the stored procedure to get the list of member IDs.
-        $memberIDs = DB::select('CALL get_sabhasad_list('.$wn.')');
+        $memberIDs = DB::select('CALL get_sabhasad_list(' . $wn . ')');
         // Extract the member IDs from the result set.
         $memberIDs = array_column($memberIDs, 'sabhasadID');
 
-      $dbSabhasadList =  SabhasadModel::with(['verificationData', 'documentData'])
-      ->whereIn('sabhasadID',$memberIDs)
-      //->orderByDesc('sabhasadID',)
-      ->get();
-      $sabhasadList = [];
-      foreach ($dbSabhasadList as $dbSabhasad) {
-        $sabhasad = new \stdClass();
-        $sabhasad->sabhasadID = $dbSabhasad->sabhasadID;
-        $sabhasad->whatsappNumber = $dbSabhasad->whatsappNumber;
-        $sabhasad->isDocumentUploaded = $dbSabhasad->documentData != null;
-        $sabhasad->name = $dbSabhasad->firstName.' '.$dbSabhasad->middleName.' '.$dbSabhasad->lastName;
-        $sabhasad->verification = $dbSabhasad->verificationData;
-        array_push($sabhasadList,$sabhasad);
-      }
-      return $sabhasadList;
-      //return SabhasadModel::with(['educationData','employeeData','documentData','currentAddress','permanentAddress'])->orderByDesc('sabhasadID',)->get();
-      //return SabhasadModel::select('sabhasadID', 'lastName','firstName')->orderByDesc('sabhasadID',)->get();
+        $dbSabhasadList = SabhasadModel::with(['verificationData', 'documentData'])
+            ->whereIn('sabhasadID', $memberIDs)
+            //->orderByDesc('sabhasadID',)
+            ->get();
+        $sabhasadList = [];
+        foreach ($dbSabhasadList as $dbSabhasad) {
+            $sabhasad = new \stdClass();
+            $sabhasad->sabhasadID = $dbSabhasad->sabhasadID;
+            $sabhasad->whatsappNumber = $dbSabhasad->whatsappNumber;
+            $sabhasad->isDocumentUploaded = $dbSabhasad->documentData != null;
+            $sabhasad->name = $dbSabhasad->firstName . ' ' . $dbSabhasad->middleName . ' ' . $dbSabhasad->lastName;
+            $sabhasad->verification = $dbSabhasad->verificationData;
+            array_push($sabhasadList, $sabhasad);
+        }
+        return $sabhasadList;
+        //return SabhasadModel::with(['educationData','employeeData','documentData','currentAddress','permanentAddress'])->orderByDesc('sabhasadID',)->get();
+        //return SabhasadModel::select('sabhasadID', 'lastName','firstName')->orderByDesc('sabhasadID',)->get();
     }
 
-    public function getSabhasadNameAddress($sabhsadNumber){
-        $result = DB::select('CALL get_sabhasad_name_address(?)',array($sabhsadNumber));
+    public function getSabhasadNameAddress($sabhsadNumber)
+    {
+        $result = DB::select('CALL get_sabhasad_name_address(?)', array($sabhsadNumber));
         return $result;
     }
-    public function generateSabhasadNumber(Request $request){
-        $sbresult = DB::select('CALL generate_sabhasad_number(?)',array($request->verificationID));
+    public function generateSabhasadNumber(Request $request)
+    {
+        $sbresult = DB::select('CALL generate_sabhasad_number(?)', array($request->verificationID));
         $sabhasadNumber = $sbresult[0]->result;
-        
-        if($sabhasadNumber && str_starts_with($sabhasadNumber, 'MS01')){
-            $nmresult = DB::select('CALL get_sabhasad_name_address(?)',array($sabhasadNumber));
+        if ($sabhasadNumber && str_starts_with($sabhasadNumber, 'MS01')) {
+            $nmresult = DB::select('CALL get_sabhasad_name_address(?)', array($sabhasadNumber));
             $name = $nmresult[0]->nameText;
+            $email = SabhasadModel::select('email')->find($request->sabhasadID)->email;
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $data = ['name' => $name, 'sabhasadNumber' => $sabhasadNumber];
+                $user = ['to' => $email];
+                Mail::send('send_registration_success_mail', $data, function ($messages) use ($user) {
+                    $messages->to($user['to']);
+                    $messages->subject('Shivmudra | Registration Success');
+                });
+                return response(['mailSent' => true, 'name' => $name, 'sabhasadNumber' => $sabhasadNumber], 200);
+            } else
+                return response(['mailSent' => false, 'name' => 'Invalid Email', 'sabhasadNumber' => $sabhasadNumber], 200);
 
-            $data = ['name'=>$name, 'sabhasadNumber'=> $sabhasadNumber];
-            $user = [];
-            Mail::send('send_registration_success_mail',$data,function($messages) use ($user){
-                $messages->to('dbtaur90@gmail.com');
-                $messages->subject('Shivmudra | Registration Success');
-            });
-            return response(['mailSent'=> true, 'name'=>$name, 'sabhasadNumber'=> $sabhasadNumber],200);
+
+        } else {
+            return response($sabhasadNumber);
         }
-        
+
     }
-    public function updateVerificationStatus(Request $request){
+    public function updateVerificationStatus(Request $request)
+    {
         $requestData = $request->all();
-        if(array_key_exists("id",$requestData) && $requestData['id'] && $requestData['id']>0){
+        if (array_key_exists("id", $requestData) && $requestData['id'] && $requestData['id'] > 0) {
             $sabhasad = SabhasadVerificationModel::find($requestData['id']);
             foreach ($requestData as $key => $value) {
-               $sabhasad[$key] = $value;
+                $sabhasad[$key] = $value;
             }
-        }
-        else{
-            if(array_key_exists("id",$requestData))
+        } else {
+            if (array_key_exists("id", $requestData))
                 unset($requestData['id']);
             $sabhasad = new SabhasadVerificationModel($requestData);
         }
         $sabhasad->save();
         return response($sabhasad->id);
     }
-    public function getSabhasadDetails($id){
-       $sabhasadDetails = SabhasadModel::with(['educationData','employeeData','documentData','currentAddress','permanentAddress'])->where('sabhasadID', $id)->orderByDesc('sabhasadID')->first();
-       if($sabhasadDetails){
-           if($sabhasadDetails->documentData){
-               $sabhasadDetails->documentData->aadharImage = 'https://marathashivmudra.co.in/storage/'. $sabhasadDetails->documentData->aadharImage;
-               $sabhasadDetails->documentData->tcImage = 'https://marathashivmudra.co.in/storage/'. $sabhasadDetails->documentData->tcImage;
-               $sabhasadDetails->documentData->photoImage = 'https://marathashivmudra.co.in/storage/'. $sabhasadDetails->documentData->photoImage;
-               $sabhasadDetails->documentData->signImage = 'https://marathashivmudra.co.in/storage/'. $sabhasadDetails->documentData->signImage;
-           }
-           if($sabhasadDetails->employeeData){
-               $sabhasadDetails->employeeData->employmentType = explode(", ", $sabhasadDetails->employeeData->employmentType);
-           }
-           $sabhasadDetails->helpForOrg = explode(", ", $sabhasadDetails->helpForOrg);
-           
-        
-       }
-       return $sabhasadDetails ;
+    public function getSabhasadDetails($id)
+    {
+        $sabhasadDetails = SabhasadModel::with(['educationData', 'employeeData', 'documentData', 'currentAddress', 'permanentAddress'])->where('sabhasadID', $id)->orderByDesc('sabhasadID')->first();
+        if ($sabhasadDetails) {
+            if ($sabhasadDetails->documentData) {
+                $sabhasadDetails->documentData->aadharImage = 'https://marathashivmudra.co.in/storage/' . $sabhasadDetails->documentData->aadharImage;
+                $sabhasadDetails->documentData->tcImage = 'https://marathashivmudra.co.in/storage/' . $sabhasadDetails->documentData->tcImage;
+                $sabhasadDetails->documentData->photoImage = 'https://marathashivmudra.co.in/storage/' . $sabhasadDetails->documentData->photoImage;
+                $sabhasadDetails->documentData->signImage = 'https://marathashivmudra.co.in/storage/' . $sabhasadDetails->documentData->signImage;
+            }
+            if ($sabhasadDetails->employeeData) {
+                $sabhasadDetails->employeeData->employmentType = explode(", ", $sabhasadDetails->employeeData->employmentType);
+            }
+            $sabhasadDetails->helpForOrg = explode(", ", $sabhasadDetails->helpForOrg);
+
+
+        }
+        return $sabhasadDetails;
     }
-    public function isPhoneNumberNew($value){
-      return response()->json(SabhasadModel::where('mobileNumber', $value)->orWhere('whatsappNumber', $value)->count()==0);
+    public function isPhoneNumberNew($value)
+    {
+        return response()->json(SabhasadModel::where('mobileNumber', $value)->orWhere('whatsappNumber', $value)->count() == 0);
     }
-    public function isAadharNumberNew($value){
-      return response()->json(SabhasadModel::where('aadhar', $value)->count()==0);
+    public function isAadharNumberNew($value)
+    {
+        return response()->json(SabhasadModel::where('aadhar', $value)->count() == 0);
     }
 
-    
-    //
+
+//
 }
