@@ -21,7 +21,7 @@ class LoginController extends Controller
             if ($response->ok()) {
                 $data = $response->json();
                 if($data['statusCode'] == '200'){
-                    $whatsappNumber = $data['user']['waNumber'];
+                    $whatsappNumber = $data['data']['userName'];
                     $whatsappNumber = $str2 = substr($whatsappNumber, 2); 
                     $sbresult = DB::select('CALL get_user_details(?)', array($whatsappNumber));
                     if($sbresult && count($sbresult)>0){
