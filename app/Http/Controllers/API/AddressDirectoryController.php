@@ -26,17 +26,9 @@ class AddressDirectoryController extends Controller
         return DB::table('AddressDirectory')->where('AddressDirectoryID',$id)->get();
     }
     
-    public function getOpArea($level, Request $request){
-        
-        $tables = ['','','vibhagiy', 'districts', 'talukas'];
-        if($level && $level<7){
-            $tname = $tables[$level];
-            if($tname && strlen($tname)>2)
-                if($request->colName && $request->colValue)
-                    return DB::table($tname)->where($request->colName, $request->colValue)->get();
-                else
-                    return DB::table($tname)->get();
-        }
-        return response(["error"=>"Bad Request"], 400);
+    public function getOpArea(Request $request){
+        $reArray = [$request->level, $request->ftrLevel, $request->ftrValue];
+        $result = DB::select('CALL get_opArea(?,?,?)', $reArray);
+        return $result;
     }
 }
