@@ -25,10 +25,4 @@ class AddressDirectoryController extends Controller
     public function getAddressDirectory($id){
         return DB::table('AddressDirectory')->where('AddressDirectoryID',$id)->get();
     }
-    
-    public function getOpArea(Request $request){
-        $reArray = [$request->level, $request->ftrLevel, $request->ftrValue];
-        $result = DB::select('CALL get_opArea(?,?,?)', $reArray);
-        return $result;
-    }
 }
