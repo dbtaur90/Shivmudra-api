@@ -16,7 +16,7 @@ class ExecutiveController extends Controller
         $executive = new Executive($executiveData);
         $executive->requestedBy = $request->tokensn;
         $executive->save();
-        return DB::select('CALL executive_letter_request(?)', array($request->tokensn, $executive->id, $requestData['addressText']));
+        return DB::select('CALL executive_letter_request(?,?,?)', array($request->tokensn, $executive->id, $requestData['addressText']));
     }
     public function getOpArea(Request $request){
         $reArray = [$request->level, $request->ftrLevel, $request->ftrValue];
