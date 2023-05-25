@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Executive extends Model
 {
     use HasFactory;
-    public $timestamps = false;
      /**
     * The attributes that aren't mass assignable.
     *
