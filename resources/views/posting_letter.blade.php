@@ -353,7 +353,7 @@
 					<tr style="vertical-align: bottom;">
 						<td style="text-align: left;"><img class="stamp" id="stampImage" src="/Leters/3/img/stamp.png" /></td>
 						<td>
-                        @if(sign1_file && sign1_file != "" && sign2_file && sign2_file != "" )
+                        @if($sign1_file && $sign1_file != "" && $sign2_file && $sign2_file != "" )
                             <img class="sign" id="signImage1" src="{{$sign1_file}}" alt="येथे सही करा" />
                         
                         @else
@@ -361,9 +361,9 @@
                         @endif
                         </td>
 						<td>
-                        @if(sign2_file && sign2_file != "" )
+                        @if($sign2_file && $sign2_file != "" )
                             <img class="sign" id="signImage2" src="{{$sign1_file}}" alt="येथे सही करा" />
-                        @elseif(sign1_file && sign1_file != "" )
+                        @elseif($sign1_file && sign1_file != "" )
                             <img class="sign" id="signImage1" src="{{$sign2_file}}" alt="येथे सही करा" />
                         @endif
                         </td>
@@ -371,16 +371,16 @@
 					<tr>
 						<td style="text-align: left;">ठिकाण: {{$place}}</td>
 						<td>
-                        @if(sign1_file && sign1_file != "" && sign2_file && sign2_file != "" )
+                        @if($sign1_file && $sign1_file != "" && $sign2_file && $sign2_file != "" )
                             {{$sign1_name}}
                         @else
                             &nbsp;&nbsp;
                         @endif
                         </td>
 						<td>
-                        @if(sign2_file && sign2_file != "" )
+                        @if($sign2_file && $sign2_file != "" )
                             {{$sign2_name}}
-                        @elseif(sign1_file && sign1_file != "" )
+                        @elseif($sign1_file && sign1_file != "" )
                             {{$sign1_name}}
                         @endif
                         </td>
@@ -388,16 +388,16 @@
 					<tr>
 						<td style="text-align: left;">दिनांक:&nbsp;<span class="date-font">{{$letterDate}}</span> </td>
 						<td>
-                        @if(sign1_file && sign1_file != "" && sign2_file && sign2_file != "" )
+                        @if($sign1_file && $sign1_file != "" && $sign2_file && $sign2_file != "" )
                             {{$sign1_post}}
                         @else
                             &nbsp;&nbsp;
                         @endif
                         </td>
 						<td>
-                        @if(sign2_file && sign2_file != "" )
+                        @if($sign2_file && $sign2_file != "" )
                             {{$sign2_post}}
-                        @elseif(sign1_file && sign1_file != "" )
+                        @elseif($sign1_file && sign1_file != "" )
                             {{$sign1_post}}
                         @endif
                         </td>
