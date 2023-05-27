@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ExecutiveController;
+use App\Http\Controllers\API\ExecutiveController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AddressDirectoryController;
@@ -29,6 +29,7 @@ Route::middleware([CheckToken::class])->group(function () {
     Route::post('sabhasad/generate-sabhasad-number', [SabhasadRegistrationController::class, 'generateSabhasadNumber']);
     Route::get('/posting/operationalArea', [ExecutiveController::class, 'getOpArea']);
     Route::post('/posting/request', [ExecutiveController::class, 'registerExecutive']);
+    Route::get('/posting/letter/{lid}', [ExecutiveController::class, 'getPostingLetter']);
 });
 
 Route::get('/sabhasad/sabhasadDetails/{id}', [SabhasadRegistrationController::class, 'getSabhasadDetails']);

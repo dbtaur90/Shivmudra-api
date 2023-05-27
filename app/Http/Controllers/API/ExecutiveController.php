@@ -18,9 +18,33 @@ class ExecutiveController extends Controller
         $executive->save();
         return DB::select('CALL executive_letter_request(?,?,?)', array($request->tokensn, $executive->id, $requestData['addressText']));
     }
-    public function getOpArea(Request $request){
+    public function getOpArea(Request $request)
+    {
         $reArray = [$request->level, $request->ftrLevel, $request->ftrValue];
         $result = DB::select('CALL get_opArea(?,?,?)', $reArray);
         return $result;
+    }
+
+    public function getPostingLetter($lid)
+    {
+        $result = DB::select('CALL get_execute_letterData(?)', array($lid));
+        $data = (array) $result[0];
+        $html = view('posting_letter',$data)->render();
+
+        // Instantiate a new Dompdf instance
+        $pdf = new \Dompdf\Dompdf();
+
+        // Load the HTML into Dompdf
+        $pdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $pdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $pdf->render();
+
+        // Return the PDF as a response
+        return response($pdf->output())
+            ->header('Content-Type', 'application/pdf');
     }
 }
