@@ -105,7 +105,7 @@ class SabhasadRegistrationController extends Controller
         // Extract the member IDs from the result set.
         $memberIDs = array_column($memberIDs, 'sabhasadID');
 
-        $dbSabhasadList = SabhasadModel::with(['verificationData', 'documentData'])
+        $dbSabhasadList = SabhasadModel::with(['verificationData', 'documentData', 'executiveData'])
             ->whereIn('sabhasadID', $memberIDs)
             //->orderByDesc('sabhasadID',)
             ->get();
@@ -117,6 +117,16 @@ class SabhasadRegistrationController extends Controller
             $sabhasad->isDocumentUploaded = $dbSabhasad->documentData != null;
             $sabhasad->name = $dbSabhasad->firstName . ' ' . $dbSabhasad->middleName . ' ' . $dbSabhasad->lastName;
             $sabhasad->verification = $dbSabhasad->verificationData;
+            $ex = $dbSabhasad->executiveData;
+            if ($ex) {
+                $result = DB::select(DB::raw('SELECT postName(?,?,?) AS result'), array($ex->level, $ex->operationalArea, $ex->post));
+                $sabhasad->title = $result[0]->result;
+                $sabhasad->exStatus = $ex->status;
+            }
+            else{
+                $sabhasad->title = null;
+                $sabhasad->exStatus = null;
+            }
             array_push($sabhasadList, $sabhasad);
         }
         return $sabhasadList;
@@ -199,5 +209,5 @@ class SabhasadRegistrationController extends Controller
     }
 
 
-//
+    //
 }

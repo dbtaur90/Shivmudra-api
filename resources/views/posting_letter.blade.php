@@ -293,8 +293,8 @@
 				<div style="text-indent:0%; margin: 0%;">
 					प्रति, <br />
 					<!-- <input id="txt" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'ch';"> -->
-					<span> मा. {{$fullName}} </span><br />
-					<div>
+					<span> मा. {{$fullName}} </span>
+					<div style="width:300px;">
 						{{$toAddress}}
 					</div>
 				</div>
@@ -362,7 +362,7 @@
                         </td>
 						<td>
                         @if($sign2_file && $sign2_file != "" )
-                            <img class="sign" id="signImage2" src="{{$sign1_file}}" alt="येथे सही करा" />
+                            <img class="sign" id="signImage2" src="{{$sign2_file}}" alt="येथे सही करा" />
                         @elseif($sign1_file && sign1_file != "" )
                             <img class="sign" id="signImage1" src="{{$sign2_file}}" alt="येथे सही करा" />
                         @endif
