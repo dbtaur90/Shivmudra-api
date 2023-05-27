@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
 use App\Models\Executive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ExecutiveController extends Controller
 {
@@ -27,9 +29,12 @@ class ExecutiveController extends Controller
 
     public function getPostingLetter($lid)
     {
+
         $result = DB::select('CALL get_execute_letterData(?)', array($lid));
         $data = (array) $result[0];
-        $html = view('posting_letter',$data)->render();
+        $pdf = Pdf::loadView('posting_letter', $data);
+        return $pdf->download('invoice.pdf');
+       /*  $html = view('posting_letter', $data)->render();
 
         // Instantiate a new Dompdf instance
         $pdf = new \Dompdf\Dompdf();
@@ -45,6 +50,6 @@ class ExecutiveController extends Controller
 
         // Return the PDF as a response
         return response($pdf->output())
-            ->header('Content-Type', 'application/pdf');
+            ->header('Content-Type', 'application/pdf'); */
     }
 }
