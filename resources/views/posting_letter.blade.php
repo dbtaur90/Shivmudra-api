@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 	<meta charset="utf-8" />
 	<title>मराठा शिवमुद्रा प्रतिष्ठान</title>
-	<link href="/Leters/3/css/default.css" rel="stylesheet" />
-	<link href="/Leters/3/css/css2.css" rel="stylesheet" />
+	<link href="https://marathashivmudra.co.in/Leters/3/css/default.css" rel="stylesheet" />
+	<link href="https://marathashivmudra.co.in/Leters/3/css/css2.css" rel="stylesheet" />
 </head>
 
 <body style="margin: 0;" spellcheck="false">
@@ -255,7 +255,7 @@
 			style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select:none; user-select: none;">
 		</div>
 		<div id="pg3" style="-webkit-user-select: none; user-select: none;">
-			<object width="100%" height="1286" data="/Leters/3/3.svg" type="image/svg+xml" id="pdf3"
+			<object width="100%" height="1286" data="https://marathashivmudra.co.in/Leters/3/3.svg" type="image/svg+xml" id="pdf3"
 				style="height:1286px; -moz-transform:scale(1); transform: scale(1); z-index: 0;"></object>
 		</div>
 		<!-- End page background -->
@@ -351,7 +351,7 @@
 			<table>
 				<tbody>
 					<tr style="vertical-align: bottom;">
-						<td style="text-align: left;"><img class="stamp" id="stampImage" src="/Leters/3/img/stamp.png" /></td>
+						<td style="text-align: left;"><img class="stamp" id="stampImage" src="https://marathashivmudra.co.in/Leters/3/img/stamp.png" /></td>
 						<td>
                         @if($sign1_file && $sign1_file != "" && $sign2_file && $sign2_file != "" )
                             <img class="sign" id="signImage1" src="{{$sign1_file}}" alt="येथे सही करा" />
