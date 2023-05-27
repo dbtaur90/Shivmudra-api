@@ -268,16 +268,16 @@
 					&nbsp;&nbsp;</span>
 				<span class="w-100 s1">मराठा तितुका मेळवावा, हिंदू धर्म वाढवावा </span>
 				<span class="w-100 s2"> मराठा शिवमुद्रा प्रतिष्ठान</span>
-				<span class="w-100 s3" style="margin-top:-17px">{{headExe}}</span>
+				<span class="w-100 s3" style="margin-top:-17px">{{$headExe}}</span>
 				<table class="head-table">
 					<tbody>
 						<tr>
 							<td>श्री. अमित दादा चव्हाण</td>
-							<td id="secondHead">{{headName}}</td>
+							<td id="secondHead">{{$headName}}</td>
 						</tr>
 						<tr>
 							<td>संस्थापक अध्यक्ष</td>
-							<td>{{headPost}}</td>
+							<td>{{$headPost}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -286,27 +286,27 @@
 			<div id="te_2" class="t s6_2" style="text-indent: 75px;width: 100%;">
 				<p class="s5_2" id="letterTitle"> नियुक्ती पत्र</p>
 				<div style="display: flex; justify-content: space-between;">
-					<p style="text-indent: 0px;"> जा.क्र: {{letter_number}}
+					<p style="text-indent: 0px;"> जा.क्र: {{$letter_number}}
 					</p>
-					<p style="text-indent: 0px;">दिनांक: <span class="date-font">{{letterDate}}</span> </p>
+					<p style="text-indent: 0px;">दिनांक: <span class="date-font">{{$letterDate}}</span> </p>
 				</div>
 				<div style="text-indent:0%; margin: 0%;">
 					प्रति, <br />
 					<!-- <input id="txt" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'ch';"> -->
-					<span> मा. {{fullName}} </span><br />
+					<span> मा. {{$fullName}} </span><br />
 					<div>
-						{{toAddress}}
+						{{$toAddress}}
 					</div>
 				</div>
 				<div id="promotionLetter" class="letter-body d-none">
-					<p style="text-align: center;">विषय: {{postName}} पदी निवड करणे बाबत</p>
+					<p style="text-align: center;">विषय: {{$postName}} पदी निवड करणे बाबत</p>
 					<P style="text-indent:0%">जय शिवराय, जय शंभुराजे.</P>
 					<p>
 						आपणास पत्रा द्वारे कळवण्यात अत्यंत आनंद होत आहे की, अखंड हिंदुस्थानचे दैवते श्रीमंत श्री.
-						छत्रपती शिवाजी महाराज व धर्मवीर छत्रपती संभाजी महाराज यांच्या प्रेरणेने आपण {{postName}}
+						छत्रपती शिवाजी महाराज व धर्मवीर छत्रपती संभाजी महाराज यांच्या प्रेरणेने आपण {{$postName}}
 						या पदावर समाधान कारक कार्य केल्याबद्दल आपल्या कार्याची दखल घेऊन संस्थापक / अध्यक्ष अमित दादा
 						चव्हाण यांच्या आदेशानुसार आपली मराठा शिवमुद्रा प्रतिष्ठान <span
-							style="color:  red;">{{postName}}</span> या पदावर पदोन्नती
+							style="color:  red;">{{$postName}}</span> या पदावर पदोन्नती
 						करण्यात आली आहे. त्याबद्दल आपले हार्दिक अभिनंदन...!
 					</p>
 					<p>
@@ -322,13 +322,13 @@
 					</p>
 				</div>
 				<div id="niyukti" class="letter-body">
-					<p style="text-align: center;">विषय: {{postName}} पदी निवड करणे बाबत</p>
+					<p style="text-align: center;">विषय: {{$postName}} पदी निवड करणे बाबत</p>
 					<P style="text-indent:0%">जय शिवराय, जय शंभुराजे.</P>
 					<p>
 						आपणास या पत्राद्वारे कळविण्यात अत्यानंद होत आहे की, अखंड हिंदुस्थानाचे आराध्यदैवत श्रीमंत श्री
 						छत्रपती शिवाजी महाराज व धर्मवीर श्री छत्रपती संभाजी महाराज यांच्या प्रेरणेने आपल्या सामाजिक
 						कार्याची दखल घेऊन संस्थापक अध्यक्ष अमित दादा चव्हाण यांच्या आदेशानुसार आपली मराठा शिवमुद्रा
-						प्रतिष्ठानच्या <span style="color:  red;">{{postName}} </span>
+						प्रतिष्ठानच्या <span style="color:  red;">{{$postName}} </span>
 						पदी निवड करण्यात आली आहे. त्या बद्दल आपले हार्दिक अभिनंदन.
 					</p>
 					<p>
@@ -354,7 +354,7 @@
 						<td style="text-align: left;"><img class="stamp" id="stampImage" src="/Leters/3/img/stamp.png" /></td>
 						<td>
                         @if(sign1_file && sign1_file != "" && sign2_file && sign2_file != "" )
-                            <img class="sign" id="signImage1" src="{{sign1_file}}" alt="येथे सही करा" />
+                            <img class="sign" id="signImage1" src="{{$sign1_file}}" alt="येथे सही करा" />
                         
                         @else
                             &nbsp;&nbsp;
@@ -362,43 +362,43 @@
                         </td>
 						<td>
                         @if(sign2_file && sign2_file != "" )
-                            <img class="sign" id="signImage2" src="{{sign1_file}}" alt="येथे सही करा" />
+                            <img class="sign" id="signImage2" src="{{$sign1_file}}" alt="येथे सही करा" />
                         @elseif(sign1_file && sign1_file != "" )
-                            <img class="sign" id="signImage1" src="{{sign2_file}}" alt="येथे सही करा" />
+                            <img class="sign" id="signImage1" src="{{$sign2_file}}" alt="येथे सही करा" />
                         @endif
                         </td>
 					</tr>
 					<tr>
-						<td style="text-align: left;">ठिकाण: {{place}}</td>
+						<td style="text-align: left;">ठिकाण: {{$place}}</td>
 						<td>
                         @if(sign1_file && sign1_file != "" && sign2_file && sign2_file != "" )
-                            {{sign1_name}}
+                            {{$sign1_name}}
                         @else
                             &nbsp;&nbsp;
                         @endif
                         </td>
 						<td>
                         @if(sign2_file && sign2_file != "" )
-                            {{sign2_name}}
+                            {{$sign2_name}}
                         @elseif(sign1_file && sign1_file != "" )
-                            {{sign1_name}}
+                            {{$sign1_name}}
                         @endif
                         </td>
 					</tr>
 					<tr>
-						<td style="text-align: left;">दिनांक:&nbsp;<span class="date-font">{{letterDate}}</span> </td>
+						<td style="text-align: left;">दिनांक:&nbsp;<span class="date-font">{{$letterDate}}</span> </td>
 						<td>
                         @if(sign1_file && sign1_file != "" && sign2_file && sign2_file != "" )
-                            {{sign1_post}}
+                            {{$sign1_post}}
                         @else
                             &nbsp;&nbsp;
                         @endif
                         </td>
 						<td>
                         @if(sign2_file && sign2_file != "" )
-                            {{sign2_post}}
+                            {{$sign2_post}}
                         @elseif(sign1_file && sign1_file != "" )
-                            {{sign1_post}}
+                            {{$sign1_post}}
                         @endif
                         </td>
 					</tr>
