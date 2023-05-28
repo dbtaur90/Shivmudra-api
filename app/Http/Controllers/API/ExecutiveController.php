@@ -29,7 +29,7 @@ class ExecutiveController extends Controller
 
     public function getPostRequestList(Request $request)
     {
-        $result = DB::select('CALL get_opArea()');
+        $result = DB::select('CALL get_posting_request_list()');
         return $result;
     }
 
