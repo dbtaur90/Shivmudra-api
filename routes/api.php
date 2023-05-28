@@ -30,7 +30,7 @@ Route::middleware([CheckToken::class])->group(function () {
     Route::get('/posting/operationalArea', [ExecutiveController::class, 'getOpArea']);
     Route::post('/posting/request', [ExecutiveController::class, 'registerExecutive']);
     Route::get('/posting/in-request-list', [ExecutiveController::class, 'getPostRequestList']);
-    Route::get('/posting/approve-posting', [ExecutiveController::class, 'approveRequest']);
+    Route::post('/posting/approve-posting', [ExecutiveController::class, 'approveRequest']);
 });
 
 Route::get('/posting/letter/{lid}', [ExecutiveController::class, 'getPostingLetter']);
