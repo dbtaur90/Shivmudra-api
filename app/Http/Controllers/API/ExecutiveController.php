@@ -27,29 +27,50 @@ class ExecutiveController extends Controller
         return $result;
     }
 
+    public function getPostRequestList(Request $request)
+    {
+        $result = DB::select('CALL get_opArea()');
+        return $result;
+    }
+
+    public function approveRequest(Request $request)
+    {
+        $flight = Executive::find($request->executiveID);
+        $flight->status = $request->status;
+        $flight->approvedBy = $request->tokensn;
+        $flight->save();
+        $user = DB::table('users')
+                ->select('id')
+                ->where('executiveId', '=', $request->executiveID)
+                ->where('letterType', '=', 3)
+                ->first();
+        return response($user);
+    }
+
     public function getPostingLetter($lid)
     {
 
         $result = DB::select('CALL get_execute_letterData(?)', array($lid));
         $data = (array) $result[0];
-        $pdf = Pdf::loadView('posting_letter', $data);
-        return $pdf->download('invoice.pdf');
-       /*  $html = view('posting_letter', $data)->render();
+        return view('posting_letter', $data);
+        // $pdf = Pdf::loadView('posting_letter', $data);
+        // return $pdf->download('invoice.pdf');
+        /*  $html = view('posting_letter', $data)->render();
 
-        // Instantiate a new Dompdf instance
-        $pdf = new \Dompdf\Dompdf();
+         // Instantiate a new Dompdf instance
+         $pdf = new \Dompdf\Dompdf();
 
-        // Load the HTML into Dompdf
-        $pdf->loadHtml($html);
+         // Load the HTML into Dompdf
+         $pdf->loadHtml($html);
 
-        // Set paper size and orientation
-        $pdf->setPaper('A4', 'portrait');
+         // Set paper size and orientation
+         $pdf->setPaper('A4', 'portrait');
 
-        // Render the PDF
-        $pdf->render();
+         // Render the PDF
+         $pdf->render();
 
-        // Return the PDF as a response
-        return response($pdf->output())
-            ->header('Content-Type', 'application/pdf'); */
+         // Return the PDF as a response
+         return response($pdf->output())
+             ->header('Content-Type', 'application/pdf'); */
     }
 }

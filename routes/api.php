@@ -29,9 +29,11 @@ Route::middleware([CheckToken::class])->group(function () {
     Route::post('sabhasad/generate-sabhasad-number', [SabhasadRegistrationController::class, 'generateSabhasadNumber']);
     Route::get('/posting/operationalArea', [ExecutiveController::class, 'getOpArea']);
     Route::post('/posting/request', [ExecutiveController::class, 'registerExecutive']);
-    Route::get('/posting/letter/{lid}', [ExecutiveController::class, 'getPostingLetter']);
+    Route::get('/posting/in-request-list', [ExecutiveController::class, 'getPostRequestList']);
+    Route::get('/posting/approve-posting', [ExecutiveController::class, 'approveRequest']);
 });
 
+Route::get('/posting/letter/{lid}', [ExecutiveController::class, 'getPostingLetter']);
 Route::get('/sabhasad/sabhasadDetails/{id}', [SabhasadRegistrationController::class, 'getSabhasadDetails']);
 Route::get('/addressDirectory/districts', [AddressDirectoryController::class, 'districtList']);
 Route::get('/addressDirectory/talukas/{district}', [AddressDirectoryController::class, 'talukaList']);
