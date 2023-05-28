@@ -139,14 +139,14 @@ class SabhasadRegistrationController extends Controller
         $result = DB::select('CALL get_sabhasad_name_address(?)', array($sabhsadNumber));
         return $result;
     }
-    public function generateSabhasadNumber(Request $request)
-    {
-        $sbresult = DB::select('CALL generate_sabhasad_number(?)', array($request->verificationID));
+
+    public function generateSabhasadNumberWrap($verificationID, $sabhasadID){
+        $sbresult = DB::select('CALL generate_sabhasad_number(?)', array($verificationID));
         $sabhasadNumber = $sbresult[0]->result;
         if ($sabhasadNumber && str_starts_with($sabhasadNumber, 'MS01')) {
             $nmresult = DB::select('CALL get_sabhasad_name_address(?)', array($sabhasadNumber));
             $name = $nmresult[0]->nameText;
-            $email = SabhasadModel::select('email')->find($request->sabhasadID)->email;
+            $email = SabhasadModel::select('email')->find($sabhasadID)->email;
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $data = ['name' => $name, 'sabhasadNumber' => $sabhasadNumber];
                 $user = ['to' => $email];
@@ -164,6 +164,10 @@ class SabhasadRegistrationController extends Controller
         }
 
     }
+    public function generateSabhasadNumber(Request $request)
+    {
+        $this->generateSabhasadNumberWrap($request->verificationID, $request->sabhasadID);
+    }
     public function updateVerificationStatus(Request $request)
     {
         $requestData = $request->all();
@@ -172,6 +176,11 @@ class SabhasadRegistrationController extends Controller
             foreach ($requestData as $key => $value) {
                 $sabhasad[$key] = $value;
             }
+            if(array_key_exists("basicVerification", $requestData)){
+                $sabhasad['verifiedBy'] = $request->tokensn;
+                $this->generateSabhasadNumberWrap($requestData['id'], $requestData['sabhasadID']);
+            }
+            
         } else {
             if (array_key_exists("id", $requestData))
                 unset($requestData['id']);
