@@ -39,7 +39,7 @@ class ExecutiveController extends Controller
         $flight->status = $request->status;
         $flight->approvedBy = $request->tokensn;
         $flight->save();
-        $user = DB::table('users')
+        $user = DB::table('letters')
                 ->select('id')
                 ->where('executiveId', '=', $request->executiveID)
                 ->where('letterType', '=', 3)
