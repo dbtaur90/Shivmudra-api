@@ -44,7 +44,7 @@ class ExecutiveController extends Controller
                 ->where('executiveId', '=', $request->executiveID)
                 ->where('letterType', '=', 3)
                 ->first();
-        return response($user)->id;
+        return response($user->id);
     }
 
     public function getPostingLetter($lid)
